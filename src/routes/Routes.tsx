@@ -5,7 +5,6 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import Tuitions from "../pages/Tuitions";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {

@@ -19,17 +19,6 @@ const Register = () => {
       // 🔐 Firebase signup
       await signup(email, password, role);
 
-      // 📡 Send role to backend
-      // await api.post(
-      //   "/v1/users/set-role",
-      //   { role },
-      //   {
-      //     headers: {
-      //       skipAuth: true,
-      //     },
-      //   },
-      // );
-
       alert("Registration successful!");
     } catch (err) {
       console.error(err);

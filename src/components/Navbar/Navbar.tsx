@@ -6,7 +6,7 @@ const navMenu = [
   </li>,
   <li key={2}>
     <NavLink to="/all-games">Explore</NavLink>
-  </li>
+  </li>,
 ];
 
 const Navbar = () => {
@@ -49,13 +49,19 @@ const Navbar = () => {
             <ul className="menu menu-horizontal px-1">{navMenu}</ul>
           </div>
           <div className="flex gap-2">
-              <Link to="/auth" className="btn bg-primary hover:bg-primary/80 text-primary-content">
-                Sign in
-              </Link>
-              <Link to="/auth/sign-up" className="hidden md:flex btn bg-zinc-800 hover:bg-zinc-900 text-primary-content">
-                Register
-              </Link>
-            </div>
+            <Link
+              to="/login"
+              className="btn bg-primary hover:bg-primary/80 text-primary-content"
+            >
+              Sign in
+            </Link>
+            <Link
+              to="/register"
+              className="hidden md:flex btn bg-zinc-800 hover:bg-zinc-900 text-primary-content"
+            >
+              Register
+            </Link>
+          </div>
         </div>
       </div>
     </div>

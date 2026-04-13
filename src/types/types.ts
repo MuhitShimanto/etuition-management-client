@@ -8,8 +8,20 @@ export const Role = {
 
 export type Role = (typeof Role)[keyof typeof Role];
 
+type BackendUser = {
+  avatar: string;
+  createdAt: Date;
+  email: string;
+  firebaseUid: string;
+  name: string;
+  role: "user" | "tutor" | "admin";
+  status: "active" | "suspended";
+  updatedAt: Date;
+};
+
 export interface AuthContextType {
-  user: User | null;
+  user: BackendUser | null;
+  firebaseUser: User | null;
   role: Role | null;
   jwt: string | null;
   loading: boolean;

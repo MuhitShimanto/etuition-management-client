@@ -18,6 +18,7 @@ type Role = "user" | "tutor" | "admin" | null;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
   const [role, setRole] = useState<Role>(null);
   const [jwt, setJwt] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,20 +29,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
 
       if (firebaseUser) {
-        const existingJwt = localStorage.getItem("jwt");
-
-        if (existingJwt) {
-          setUser(firebaseUser);
-          setJwt(existingJwt);
-          setRole(localStorage.getItem("role") as Role);
-          setLoading(false);
-          return;
-        }
-
         try {
           // 🔑 Get Firebase ID Token
           const firebaseToken = await firebaseUser.getIdToken();
-
           // ✅ GET ROLE FROM LOCAL STORAGE
           const pendingRole = localStorage.getItem("pendingRole");
 
@@ -53,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               roleChosen: pendingRole || "user",
             },
             {
-              headers: {
+              meta: {
                 skipAuth: true,
               },
             },
@@ -62,7 +52,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const data = res.data;
 
           // 💾 Store everything
-          setUser(firebaseUser);
+          setUser(data.user);
+          setFirebaseUser(firebaseUser);
           setJwt(data.token);
           setRole(data.user.role);
 
@@ -76,21 +67,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } catch (err) {
           console.error("Auth sync error:", err);
           setUser(null);
+          setFirebaseUser(null);
           setJwt(null);
           setRole(null);
+          await signOut(auth);
         } finally {
           localStorage.removeItem("pendingRole");
         }
       } else {
         // 🚪 Logged out
         setUser(null);
+        setFirebaseUser(null);
         setJwt(null);
         setRole(null);
 
         localStorage.removeItem("jwt");
         localStorage.removeItem("role");
       }
-
       setLoading(false);
     });
 
@@ -127,6 +120,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value: AuthContextType = {
     user,
+    firebaseUser,
     role,
     jwt,
     loading,
